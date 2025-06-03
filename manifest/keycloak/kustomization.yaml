@@ -3,3 +3,5 @@ kind: Kustomization
 
 resources:
   - keycloak.yaml # Keycloak CR
+  - certificate.yaml # TLS certificate
+  
