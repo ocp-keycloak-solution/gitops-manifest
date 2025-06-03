@@ -1,0 +1,8 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak-platform-instance # Must match the name in the base
+  namespace: keycloak # Must match the namespace in the base
+spec:
+  hostname:
+    hostname: keycloak.apps.cluster-7cl88.7cl88.sandbox831.opentlc.com
