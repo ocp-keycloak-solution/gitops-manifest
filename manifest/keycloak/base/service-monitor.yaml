@@ -12,9 +12,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: keycloak # From the service labels
-      app.kubernetes.io/instance: keycloak-platform-instance # From the service labels
-      app.kubernetes.io/managed-by: keycloak-operator # From the service labels
+      app: keycloak-platform # From the service labels
   namespaceSelector:
     matchNames:
       - keycloak
@@ -28,3 +26,5 @@ spec:
           key: tls.crt
           name: keycloak-tls-secret
       serverName: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io 
+    interval: 30s # Scrape interval, adjust as needed
+  
