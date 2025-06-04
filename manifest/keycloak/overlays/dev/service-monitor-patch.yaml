@@ -6,6 +6,6 @@ metadata:
 
 spec:
   endpoints:
-  - port: management
+  - port: https
     tlsConfig:
       serverName: keycloak.apps.cluster-7cl88.7cl88.sandbox831.opentlc.com 
