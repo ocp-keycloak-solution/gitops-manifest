@@ -25,9 +25,9 @@ spec:
     hostname: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # THIS MUST BE PATCHED BY OVERLAYS
   proxy:
     headers: xforwarded
-  features:
-    enabled:
-      - "opentelemetry"
+  additionalOptions:
+    - name: metrics-enabled
+      value: 'true'
 
   
  
