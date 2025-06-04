@@ -27,4 +27,4 @@ spec:
     headers: xforwarded
   features:
     metrics-listener:
-      ebabled: true # Enable metrics listener
+      enabled: true # Enable metrics listener
