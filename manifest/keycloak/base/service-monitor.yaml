@@ -19,7 +19,7 @@ spec:
     matchNames:
       - keycloak
   endpoints:
-  - port: https # This matches the 'https' port (8443) on your service
+  - port: management
     path: /q/metrics # Default metrics path for Keycloak (Quarkus versions)
     scheme: https # The service port is 'https'
     tlsConfig:
