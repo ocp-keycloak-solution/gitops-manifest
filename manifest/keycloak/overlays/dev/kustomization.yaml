@@ -7,4 +7,3 @@ resources:
 patchesStrategicMerge:
   - hostname-patch.yaml
   - certificate-patch.yaml
-  - service-monitor-patch.yaml
