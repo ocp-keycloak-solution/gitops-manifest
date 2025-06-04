@@ -13,5 +13,5 @@ spec:
    name: zerossl-production-ec2 # Replace with your actual ClusterIssuer name
   
   dnsNames:
-   - keycloak.apps.cluster-6l9fk.dynamic.redhatworkshops.io # Replace with your actual domain name
+   - keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # Replace with your actual domain name
   

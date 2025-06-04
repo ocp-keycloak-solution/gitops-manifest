@@ -22,6 +22,8 @@ spec:
   http:
     tlsSecret: keycloak-tls-secret 
   hostname:
-    hostname: keycloak.apps.cluster-6l9fk.dynamic.redhatworkshops.io # THIS MUST BE PATCHED BY OVERLAYS
+    hostname: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # THIS MUST BE PATCHED BY OVERLAYS
   proxy:
     headers: xforwarded
+  features:
+    metrics-listener: true # Enable metrics listener

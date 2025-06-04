@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/ocp-keycloak-solution/gitops-manifest.git
     targetRevision: main
-    path: manifest/keycloak/base
+    path: manifest/keycloak/overlays/dev
   syncPolicy:
     automated:
       prune: true

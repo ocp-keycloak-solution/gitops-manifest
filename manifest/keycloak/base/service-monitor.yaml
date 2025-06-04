@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keycloak-metrics
+  namespace: keycloak # You can create this in the 'keycloak' namespace.
+                      # The OpenShift monitoring stack usually discovers ServiceMonitors
+                      # in other namespaces if properly configured (often  by default).
+                      # Alternatively, create it in 'openshift-user-workload-monitoring'
+                      # or your specific Prometheus namespace if  'keycloak' doesn't work.
+  labels:
+      # You can add a label if your Prometheus specifically looks for it, e.g.: k8s-app: keycloak-metrics
+  spec:
+    selector:
+      matchLabels:
+        app: keycloak # From the service labels
+        app.kubernetes.io/instance: keycloak-platform-instance # From the service labels
+        app.kubernetes.io/managed-by: keycloak-operator # From the service labels
+    namespaceSelector:
+      matchNames:
+        - keycloak
+    endpoints:
+    - port: https # This matches the 'https' port (8443) on your service
+      path: /q/metrics # Default metrics path for Keycloak (Quarkus versions)
+      scheme: https # The service port is 'https'
+      tlsConfig:
+        insecureSkipVerify: false # Set to true only if you have issues and understand the risk
+      interval: 30s

@@ -3,3 +3,4 @@ kind: Kustomization
 
 resources:
   - keycloak/application.yaml
+  - postgres/application.yaml
