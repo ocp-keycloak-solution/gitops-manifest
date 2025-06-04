@@ -5,4 +5,5 @@ resources:
   - keycloak.yaml # Keycloak CR
   - certificate.yaml # TLS certificate
   - service-monitor.yaml # ServiceMonitor for Prometheus
+  - user-workload-monitoring.yaml # User workload monitoring Openshift configuration
   
