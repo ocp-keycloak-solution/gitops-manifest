@@ -27,5 +27,4 @@ spec:
         secret:
           key: tls.crt
           name: keycloak-tls-secret
-      serverName: keycloak-platform-instance-service.keycloak.svc.cluster.local # Internal service name for Keycloak       
-    interval: 30s
+      serverName: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io 
