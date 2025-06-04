@@ -26,5 +26,5 @@ spec:
   proxy:
     headers: xforwarded
   features:
-    metrics-listener:
-      enabled: true # Enable metrics listener
+    enabled:
+      - metrics-listener
