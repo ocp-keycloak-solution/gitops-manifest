@@ -15,7 +15,7 @@ spec:
       app: keycloak
  
   endpoints:
-  - port: managment 
+  - port: management 
     path: /metrics # The path to the metrics endpoint
     scheme: https # The service port is 'https'
     tlsConfig:
