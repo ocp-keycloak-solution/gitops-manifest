@@ -4,9 +4,6 @@ metadata:
   name: keycloak-tls
   namespace: keycloak 
 spec:
-  issuerRef:
-   name: zerossl-production-ec2 
-  
   dnsNames:
    - keycloak.apps.cluster-7cl88.7cl88.sandbox831.opentlc.com
   

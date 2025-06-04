@@ -20,9 +20,9 @@ spec:
       key: database-password # Must match secretKey in postgres/postgres-secret.yaml
    
   http:
-    tlsSecret: keycloak-tls-secret 
+    tlsSecret: keycloak-tls
   hostname:
-    hostname: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # THIS MUST BE PATCHED BY OVERLAYS
+    hostname: keycloak.apps.cluster.example.io # THIS MUST BE PATCHED BY OVERLAYS
   proxy:
     headers: xforwarded
   additionalOptions:
