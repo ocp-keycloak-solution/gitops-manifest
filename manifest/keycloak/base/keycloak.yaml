@@ -27,7 +27,7 @@ spec:
     headers: xforwarded
   features:
     enabled:
-      - "metrics"
+      - "opentelemetry"
 
   
  
