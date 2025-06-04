@@ -19,10 +19,7 @@ spec:
     path: /metrics # The path to the metrics endpoint
     scheme: https # The service port is 'https'
     tlsConfig:
-      ca:
-        secret:
-          key: tls.crt
-          name: keycloak-tls
       serverName: keycloak-platform-instance-service.keycloak.svc.cluster.local 
+      insecureSkipVerify: true # Set to true if you are using self-signed certificates
     interval: 30s # Scrape interval, adjust as needed
   
