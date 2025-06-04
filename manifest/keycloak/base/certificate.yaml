@@ -14,5 +14,4 @@ spec:
   
   dnsNames:
    - keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # Replace with your actual domain name
-   - keycloak-platform-instance-service.keycloak.svc.cluster.local # This is the internal service name for Keycloak
   
