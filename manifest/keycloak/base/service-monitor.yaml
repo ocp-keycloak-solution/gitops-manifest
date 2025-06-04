@@ -12,10 +12,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: keycloak-platform # From the service labels
-  namespaceSelector:
-    matchNames:
-      - keycloak
+      app: keycloak
+ 
   endpoints:
   - port: https # The service port is 'https' (targets port 8443)
     path: /metrics # The path to the metrics endpoint
