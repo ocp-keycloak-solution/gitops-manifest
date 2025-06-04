@@ -23,6 +23,6 @@ spec:
         secret:
           key: tls.crt
           name: keycloak-tls
-      serverName: keycloak-platform-instance.keycloak.svc.cluster.local 
+      serverName: keycloak-platform-instance-service.keycloak.svc.cluster.local 
     interval: 30s # Scrape interval, adjust as needed
   

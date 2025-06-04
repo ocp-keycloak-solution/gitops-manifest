@@ -8,4 +8,4 @@ spec:
   endpoints:
   - port: management
     tlsConfig:
-      serverName: keycloak-platform-instance.keycloak.svc.cluster.local
+      serverName: keycloak-platform-instance-service.keycloak.svc.cluster.local
