@@ -23,6 +23,9 @@ spec:
     path: /metrics # The path to the metrics endpoint
     scheme: https # The service port is 'https'
     tlsConfig:
-      serverName: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # Replace with your Keycloak service URL 
-      insecureSkipVerify: false # Set to true only if you have issues and understand the risk
+      ca:
+        secret:
+          key: tls.crt
+          name: keycloak-tls-secret
+      serverName: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # Replace with your Keycloak service URL       
     interval: 30s
