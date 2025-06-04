@@ -6,6 +6,6 @@ metadata:
 
 spec:
   endpoints:
-  - port: https
+  - port: management
     tlsConfig:
       serverName: keycloak-platform-instance.keycloak.svc.cluster.local
