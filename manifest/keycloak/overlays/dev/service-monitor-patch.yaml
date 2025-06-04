@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keycloak-metrics
+  namespace: keycloak 
+
+spec:
+  endpoints:
+  - port: management
+    tlsConfig:
+      serverName: keycloak.apps.cluster-7cl88.7cl88.sandbox831.opentlc.com 

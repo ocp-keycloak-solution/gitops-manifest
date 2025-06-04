@@ -23,6 +23,6 @@ spec:
     path: /q/metrics # Default metrics path for Keycloak (Quarkus versions)
     scheme: https # The service port is 'https'
     tlsConfig:
-      serverName: keycloak-platform-instance-service.keycloak.svc 
+      serverName: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # Replace with your Keycloak service URL 
       insecureSkipVerify: false # Set to true only if you have issues and understand the risk
     interval: 30s
