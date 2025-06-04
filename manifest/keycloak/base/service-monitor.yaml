@@ -20,7 +20,7 @@ spec:
       - keycloak
   endpoints:
   - port: https # The service port is 'https' (targets port 8443)
-    path: /q/metrics # Default metrics path for Keycloak (Quarkus versions)
+    path: /metrics # The path to the metrics endpoint
     scheme: https # The service port is 'https'
     tlsConfig:
       serverName: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # Replace with your Keycloak service URL 
