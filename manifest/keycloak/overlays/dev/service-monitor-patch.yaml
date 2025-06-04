@@ -8,4 +8,4 @@ spec:
   endpoints:
   - port: https
     tlsConfig:
-      serverName: keycloak.apps.cluster-7cl88.7cl88.sandbox831.opentlc.com 
+      serverName: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io
