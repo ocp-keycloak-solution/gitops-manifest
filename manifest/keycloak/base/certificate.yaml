@@ -5,13 +5,17 @@ metadata:
   name: keycloak-tls
   namespace: keycloak # Replace with the namespace ofyour Keycloak instance
 spec:
-  secretName: keycloak-tls-secret # This secret will store the TLS certificate
+  secretName: keycloak-tls # This secret will store the TLS certificate
   
   issuerRef:
-   group: cert-manager.io
-   kind: ClusterIssuer
-   name: zerossl-production-ec2 # Replace with your actual ClusterIssuer name
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: global-issuer
   
   dnsNames:
-   - keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io # Replace with your actual domain name
-  
+    - keycloak-service
+    - keycloak-service.keycloak.svc
+    - keycloak-service.keycloak.svc.cluster.local
+    - keycloak.apps.cluster.example.io # Replace with your actual domain name
+  usages:
+    - server auth
