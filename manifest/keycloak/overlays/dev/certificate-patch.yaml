@@ -3,9 +3,8 @@ kind: Certificate
 metadata:
   name: keycloak-tls
   namespace: keycloak 
+issuerRef:
+   name: zerossl-production-ec2
 spec:
   dnsNames:
-    - keycloak-platform-instance-service
-    - keycloak-platform-instance-service.keycloak.svc
-    - keycloak-platform-instance-service.keycloak.svc.cluster.local
     - keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io
