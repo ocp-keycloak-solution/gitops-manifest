@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/your-org/keycloak-gitops-manifest.git
-    targetRevision: HEAD
+    targetRevision: th-openshift-oauth
     path: manifest/openshift-oauth/overlays/dev
   destination:
     server: https://kubernetes.default.svc
