@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-config
+  namespace: openshift-config
+data:
+  clusterRouterDomain: "apps.cluster.example.io"
+  keycloakHostname: "keycloak.apps.cluster.example.io"
+  openShiftConsoleHostname: "console-openshift-console.apps.cluster.example.io"
+  argoCDHostname: "argocd-server-openshift-gitops.apps.cluster.example.io"

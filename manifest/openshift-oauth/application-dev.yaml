@@ -1,20 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: keycloak
+  name: openshift-oauth-keycloak-dev
   namespace: openshift-gitops
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
+  source:
+    repoURL: https://github.com/your-org/keycloak-gitops-manifest.git
+    targetRevision: HEAD
+    path: manifest/openshift-oauth/overlays/dev
   destination:
     server: https://kubernetes.default.svc
-    namespace: keycloak
-  source:
-    repoURL: https://github.com/ocp-keycloak-solution/gitops-manifest.git
-    targetRevision: main
-    path: manifest/keycloak
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
+      - CreateNamespace=true
       - RespectIgnoreDifferences=true

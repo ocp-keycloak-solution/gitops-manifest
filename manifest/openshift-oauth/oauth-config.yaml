@@ -1,0 +1,39 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: keycloak
+    mappingMethod: claim
+    type: OpenID
+    openID:
+      clientID: openshift
+      clientSecret:
+        name: keycloak-oauth-secret
+      extraScopes:
+      - email
+      - profile
+      extraAuthorizeParameters:
+        include_granted_scopes: "true"
+      claims:
+        preferredUsername:
+        - preferred_username
+        - username
+        name:
+        - given_name
+        - name
+        email:
+        - email
+        groups:
+        - groups
+      issuer: https://keycloak.apps.cluster.example.io/realms/openshift
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-oauth-secret
+  namespace: openshift-config
+type: Opaque
+stringData:
+  clientSecret: "your-openshift-client-secret" # This should be replaced with actual secret

@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../
+
+patchesStrategicMerge:
+  - oauth-hostname-patch.yaml
+  - keycloak-hostname-patch.yaml
+  - cluster-config-patch.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: cluster-config
+      fieldPath: data.clusterRouterDomain
+    targets:
+      - select:
+          kind: OAuth
+          name: cluster
+        fieldPaths:
+          - spec.identityProviders.[name=keycloak].openID.issuer
+      - select:
+          kind: KeycloakClient
+          name: openshift-client
+        fieldPaths:
+          - spec.client.redirectUris.[0]
+          - spec.client.webOrigins.[1]
+      - select:
+          kind: KeycloakClient  
+          name: argocd-client
+        fieldPaths:
+          - spec.client.redirectUris.[0]
+          - spec.client.webOrigins.[0]
