@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/keycloak-gitops-manifest.git
+    repoURL: https://github.com/ocp-keycloak-solution/gitops-manifest.git
     targetRevision: th-openshift-oauth
     path: manifest/openshift-oauth/overlays/dev
   destination:

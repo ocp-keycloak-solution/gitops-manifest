@@ -8,8 +8,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/keycloak-gitops-manifest.git
-    targetRevision: HEAD
+    repoURL: https://github.com/ocp-keycloak-solution/gitops-manifest.git
+    targetRevision: main
     path: manifest/openshift-oauth
   destination:
     server: https://kubernetes.default.svc
