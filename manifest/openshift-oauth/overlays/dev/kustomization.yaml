@@ -8,6 +8,7 @@ patchesStrategicMerge:
   - oauth-hostname-patch.yaml
   - keycloak-hostname-patch.yaml
   - cluster-config-patch.yaml
+  - keycloak-client-urls-patch.yaml
 
 replacements:
   - source:
@@ -20,15 +21,3 @@ replacements:
           name: cluster
         fieldPaths:
           - spec.identityProviders.[name=keycloak].openID.issuer
-      - select:
-          kind: KeycloakClient
-          name: openshift-client
-        fieldPaths:
-          - spec.client.redirectUris.[0]
-          - spec.client.webOrigins.[1]
-      - select:
-          kind: KeycloakClient  
-          name: argocd-client
-        fieldPaths:
-          - spec.client.redirectUris.[0]
-          - spec.client.webOrigins.[0]
