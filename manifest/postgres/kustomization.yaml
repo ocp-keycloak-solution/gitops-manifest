@@ -10,4 +10,5 @@ resources:
   - postgres-service.yaml 
   - postgres-deployment.yaml
   - postgres-exporter.yaml
+  - postgres-exporter-service.yaml
   - service-monitor.yaml
