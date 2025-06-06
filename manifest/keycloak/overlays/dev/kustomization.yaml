@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
   - ../../base
 
-patches:
+patchesStrategicMerge:
   - hostname-patch.yaml
   - certificate-patch.yaml

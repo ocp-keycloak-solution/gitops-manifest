@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
 
-patches:
+patchesStrategicMerge:
   - oauth-hostname-patch.yaml
   - keycloak-hostname-patch.yaml
   - cluster-config-patch.yaml
