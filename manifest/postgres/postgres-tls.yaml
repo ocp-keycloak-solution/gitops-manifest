@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-tls
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  commonName: postgres
+  dnsNames:
+   - postgresql.keycloak.svc
+   - postgresql.keycloak.svc.cluster.local
+  duration: 2160h
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: global-issuer
+  renewBefore: 360h
+  secretName: postgres-tls

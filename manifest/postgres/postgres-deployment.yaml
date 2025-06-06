@@ -6,16 +6,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: postgresql
+      app: postgresql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        name: postgresql
+        app: postgresql
     spec:
       containers:
-      - env:
+      - name: postgres
+        env:
         - name: POSTGRESQL_USER
           valueFrom:
             secretKeyRef:
@@ -31,38 +32,63 @@ spec:
             secretKeyRef:
               key: database-name
               name: postgresql-secret
+        - name: POSTGRESQL_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgres-admin-password
+              name: postgresql-secret
         image: "registry.redhat.io/rhel10/postgresql-16"
         imagePullPolicy: IfNotPresent
-        livenessProbe:
-          exec:
-            command:
-            - /usr/libexec/check-container
-            - --live
-          initialDelaySeconds: 120
-          timeoutSeconds: 10
-        name: "postgresql-persistent"
-        ports:
-        - containerPort: 5432
-          protocol: TCP
-        readinessProbe:
-          exec:
-            command:
-            - /usr/libexec/check-container
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+        volumeMounts:
+            - name: postgresql-persistent-data
+              mountPath: /var/lib/pgsql/data      
+            - name: tls
+              mountPath: /etc/postgres-tls
+            - name: config
+              mountPath: /opt/app-root/src/postgresql-cfg/postgresql.conf
+              subPath: postgresql.conf
+            - name: post-init
+              mountPath: /opt/app-root/src/postgresql-start/post-init.sh
+              subPath: post-init.sh
         resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
           limits:
-            memory: 512Mi
+            memory: "1Gi"
+            cpu: "1"
+        readinessProbe:
+          timeoutSeconds: 1
+          initialDelaySeconds: 5
+          exec:
+            command:
+            - "/bin/sh"
+            - "-i"
+            - "-c"
+            - psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c
+              'SELECT 1'
+        livenessProbe:
+          timeoutSeconds: 1
+          initialDelaySeconds: 30
+          tcpSocket:
+            port: 5432
         securityContext:
           capabilities: {}
           privileged: false
         terminationMessagePath: /dev/termination-log
-        volumeMounts:
-        - mountPath: /var/lib/pgsql/data
-          name: postgresql-persistent-data
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
       volumes:
-      - name: postgresql-persistent-data
-        persistentVolumeClaim:
-          claimName: postgresql-pvc
+        - name: tls
+          projected:
+            sources:
+              - secret:
+                  name: postgres-tls
+            defaultMode: 0400 
+        - name: config
+          configMap:
+            name: postgres-config
+        - name: post-init
+          configMap:
+            name: postgres-init-script
+        - name: postgresql-persistent-data
+          persistentVolumeClaim:
+            claimName: postgresql-pvc
