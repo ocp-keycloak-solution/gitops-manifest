@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - grafana-ds.yaml
-  - grafana-route.yaml
   
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "5"
