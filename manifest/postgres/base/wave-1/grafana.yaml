@@ -6,13 +6,6 @@ metadata:
     dashboards: grafana
     folders: grafana
 spec:
-  persistentVolumeClaim:
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 10Gi
   config:
     auth:
       disable_login_form: 'false'
