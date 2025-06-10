@@ -47,9 +47,6 @@ spec:
             - name: config
               mountPath: /opt/app-root/src/postgresql-cfg/postgresql.conf
               subPath: postgresql.conf
-            - name: post-init
-              mountPath: /opt/app-root/src/postgresql-start/post-init.sh
-              subPath: post-init.sh
         resources:
           requests:
             memory: "256Mi"
@@ -118,9 +115,6 @@ spec:
         - name: config
           configMap:
             name: postgres-config
-        - name: post-init
-          configMap:
-            name: postgres-init-script
         - name: postgresql-persistent-data
           persistentVolumeClaim:
             claimName: postgresql-pvc
