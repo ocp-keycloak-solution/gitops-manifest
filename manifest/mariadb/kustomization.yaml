@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - mariadb-secret.yaml
+  - mariadb-configmap.yaml
+  - mariadb-master-pvc.yaml
+  - mariadb-slave-pvc.yaml
+  - mariadb-master-deployment.yaml
+  - mariadb-slave-deployment.yaml
+  - mariadb-master-service.yaml
+  - mariadb-slave-service.yaml
+  - mariadb-headless-service.yaml
+
+namespace: keycloak
+
+commonLabels:
+  app: mariadb
+  component: database

@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-config
+  namespace: keycloak
+data:
+  master.cnf: |
+    [mysqld]
+    log-bin=mysql-bin
+    server-id=1
+    binlog-format=ROW
+    binlog-do-db=keycloak
+    
+    # Performance tuning for Keycloak
+    innodb_buffer_pool_size=512M
+    innodb_log_file_size=128M
+    innodb_flush_log_at_trx_commit=2
+    innodb_flush_method=O_DIRECT
+    
+    # Connection settings
+    max_connections=200
+    wait_timeout=600
+    interactive_timeout=600
+    
+    # Character set
+    character_set_server=utf8mb4
+    collation_server=utf8mb4_unicode_ci
+    
+    # Replication settings
+    expire_logs_days=7
+    max_binlog_size=100M
+    
+  slave.cnf: |
+    [mysqld]
+    server-id=2
+    read-only=1
+    log-bin=mysql-bin
+    binlog-format=ROW
+    relay-log=relay-log
+    
+    # Performance tuning for Keycloak
+    innodb_buffer_pool_size=512M
+    innodb_log_file_size=128M
+    innodb_flush_log_at_trx_commit=2
+    innodb_flush_method=O_DIRECT
+    
+    # Connection settings
+    max_connections=200
+    wait_timeout=600
+    interactive_timeout=600
+    
+    # Character set
+    character_set_server=utf8mb4
+    collation_server=utf8mb4_unicode_ci
+    
+    # Replication settings
+    relay_log_purge=1
+    
+  init-master.sql: |
+    -- Create keycloak database
+    CREATE DATABASE IF NOT EXISTS keycloak CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    
+    -- Create keycloak user
+    CREATE USER IF NOT EXISTS 'keycloak'@'%' IDENTIFIED BY 'replace-with-keycloak-password';
+    GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'%';
+    
+    -- Create replication user
+    CREATE USER IF NOT EXISTS 'replication'@'%' IDENTIFIED BY 'replace-with-replication-password';
+    GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
+    
+    FLUSH PRIVILEGES;
+    
+  init-slave.sql: |
+    -- Configure slave to connect to master
+    CHANGE MASTER TO
+      MASTER_HOST='mariadb-master.keycloak.svc.cluster.local',
+      MASTER_USER='replication',
+      MASTER_PASSWORD='replace-with-replication-password',
+      MASTER_AUTO_POSITION=1;
+    
+    START SLAVE;

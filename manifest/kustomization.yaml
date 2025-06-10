@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - keycloak/application-dev.yaml
+  - mariadb/application.yaml
   - postgres/application.yaml
   - openshift-monitoring/application.yaml
   - cert-issuer/application.yaml
