@@ -1,0 +1,32 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgresql  # Match the label on the Service that exposes the exporter
+  namespaceSelector:
+    matchNames:
+      - keycloak            # Namespace where the exporter Service exists
+  endpoints:
+    - port: metrics            # Name of the port exposed in the Service (see below)
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+      relabelings:
+        - action: replace
+          sourceLabels:
+            - __meta_kubernetes_service_label_app
+          targetLabel: job
+        - action: replace
+          sourceLabels:
+            - __meta_kubernetes_namespace
+          targetLabel: namespace
+        - sourceLabels:
+            - __meta_kubernetes_namespace
+          targetLabel: kubernetes_namespace
+        - action: replace
+          sourceLabels:
+            - __meta_kubernetes_pod_name
+          targetLabel: instance

@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-grafana-bearer-token
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: token-creator
+        image: registry.redhat.io/openshift4/ose-cli:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -e
+          echo "Waiting for service account token..."
+          max_attempts=30
+          attempt=0
+          while [ $attempt -lt $max_attempts ]; do
+            if oc get secret grafana-sa-token -o jsonpath='{.data.token}' >/dev/null 2>&1; then
+              echo "Service account token found!"
+              break
+            fi
+            sleep 5
+            attempt=$((attempt + 1))
+          done
+          
+          if [ $attempt -eq $max_attempts ]; then
+            echo "ERROR: Service account token not found"
+            exit 1
+          fi
+          
+          TOKEN=$(oc get secret grafana-sa-token -o jsonpath='{.data.token}' | base64 -d)
+          
+          oc create secret generic grafana-bearer-token \
+            --from-literal=bearer-token="Bearer $TOKEN" \
+            --dry-run=client -o yaml | kubectl apply -f -
+          
+          echo "Bearer token secret created successfully!"

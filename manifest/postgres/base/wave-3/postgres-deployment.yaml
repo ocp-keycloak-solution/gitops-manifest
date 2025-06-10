@@ -76,6 +76,38 @@ spec:
           capabilities: {}
           privileged: false
         terminationMessagePath: /dev/termination-log
+      - name: postgres-exporter
+        image: quay.io/prometheuscommunity/postgres-exporter
+        env:
+          - name: DATA_SOURCE_URI
+            value: localhost:5432/keycloak?sslmode=require
+          - name: DATA_SOURCE_USER
+            value: postgres
+          - name: DATA_SOURCE_PASS 
+            valueFrom:
+              secretKeyRef:
+                key: postgres-admin-password
+                name: postgresql-secret
+        ports:
+        - containerPort: 9187
+        command:
+        - /bin/sh
+        - -c
+        - |
+          exec /bin/postgres_exporter --collector.postmaster --web.listen-address=:9187
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 9187
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
       volumes:
         - name: tls
           projected:
