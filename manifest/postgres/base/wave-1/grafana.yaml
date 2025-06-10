@@ -6,6 +6,13 @@ metadata:
     dashboards: grafana
     folders: grafana
 spec:
+  persistentVolumeClaim:
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
   config:
     auth:
       disable_login_form: 'false'
@@ -14,11 +21,6 @@ spec:
     security:
       admin_password: admin
       admin_user: root
-  persistence:
-    enabled: true
-    accessModes:
-      - ReadWriteOnce
-    size: 5Gi
   deployment:
     spec:
       template:
