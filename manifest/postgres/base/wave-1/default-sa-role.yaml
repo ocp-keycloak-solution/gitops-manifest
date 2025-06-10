@@ -25,6 +25,31 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grafana-ds-manager
+  namespace: keycloak  
+rules:
+- apiGroups: ["grafana.integreatly.org"]
+  resources: ["grafanadatasources"]
+  verbs: ["get", "list", "create", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grafana-ds-manager
+  namespace: keycloak  
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: keycloak
+roleRef:
+  kind: Role
+  name: grafana-ds-manager
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: pv-manager
