@@ -4,6 +4,18 @@ kind: Kustomization
 resources:
   - ../../base
 
-patchesStrategicMerge:
-  - hostname-patch.yaml
-  - certificate-patch.yaml
+patches:
+  - target:
+      kind: Certificate
+      name: keycloak-tls
+    patch: |-
+      - op: add
+        path: /spec/dnsNames/0
+        value: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io
+  - target:
+      kind: Keycloak
+      name: keycloak-platform-instance
+    patch: |-
+      - op: replace
+        path: /spec/hostname/hostname
+        value: keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io
