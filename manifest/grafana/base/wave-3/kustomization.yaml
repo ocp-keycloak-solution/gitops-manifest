@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - grafana-route.yaml
+  - grafana-ds-job.yaml
   
 commonAnnotations:
-  argocd.argoproj.io/sync-wave: "5"
+  argocd.argoproj.io/sync-wave: "3"

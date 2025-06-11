@@ -6,7 +6,7 @@ metadata:
     app: grafana
 spec:
   configMapRef:
-    name: grafana-dashboard-config
+    name: grafana-postgres-dashboard-config
     key: postgres-db.json
   instanceSelector:
     matchLabels:
