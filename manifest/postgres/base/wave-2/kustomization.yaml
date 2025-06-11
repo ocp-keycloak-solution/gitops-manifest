@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - postgres-config.yaml
+  - postgres-pvc.yaml
   
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "2"
