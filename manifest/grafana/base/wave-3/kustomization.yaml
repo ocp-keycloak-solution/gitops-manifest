@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - grafana-ds-job.yaml
+  - grafana-rbac.yaml
   
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "3"
