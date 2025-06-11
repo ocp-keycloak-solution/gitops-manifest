@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - default-sa-role.yaml
+  - grafana.yaml
+  - grafana-postgres-dashboard-config.yaml
+  - grafana-ds-config.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-wave: "1"

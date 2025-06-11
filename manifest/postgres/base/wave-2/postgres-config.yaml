@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  postgresql.conf: |
+    # Connection Settings
+    listen_addresses = '*'
+    port = 5432
+
+    # SSL Configuration
+    ssl = on
+    ssl_cert_file = '/etc/postgres-tls/tls.crt'
+    ssl_key_file = '/etc/postgres-tls/tls.key'
+    ssl_ca_file = '/etc/postgres-tls/ca.crt'
+
+    # Memory & Performance Tuning (optional defaults)
+    shared_buffers = 128MB
+    max_connections = 100
+
+    # Authentication
+    password_encryption = scram-sha-256

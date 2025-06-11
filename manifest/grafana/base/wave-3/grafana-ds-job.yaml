@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-grafana-datasource
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+        - name: datasource-config
+          configMap:
+            name: grafana-datasource-config  # Your configmap name
+            items:
+              - key: prometheus-ds.yaml
+                path: datasource.yaml
+        - name: bearer-token
+          secret:
+            secretName: grafana-sa-token   # Your secret name
+            items:
+              - key: token
+                path: token
+        - name: output
+          emptyDir: {}
+      containers:
+      - name: token-creator
+        image: registry.redhat.io/openshift4/ose-cli:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+            echo "Starting token replacement..."
+            TOKEN=$(cat /token/token)
+            echo "Token read: ${TOKEN}"
+            sed "s|__BEARER_TOKEN__|${TOKEN}|g" /config/datasource.yaml > /output/ds.yaml
+            echo "Replacement done. Showing patched file:"
+            cat /output/ds.yaml
+            oc delete GrafanaDatasource prometheus-grafanadatasource
+            oc create -f /output/ds.yaml
+        volumeMounts:
+          - name: datasource-config
+            mountPath: /config
+            readOnly: true
+          - name: bearer-token
+            mountPath: /token
+            readOnly: true
+          - name: output
+            mountPath: /output
