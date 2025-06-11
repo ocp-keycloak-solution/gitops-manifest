@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: keycloak
+  name: cert-issuer
   namespace: openshift-gitops
 spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: keycloak
+    namespace: cert-manager
   source:
     repoURL: https://github.com/ocp-keycloak-solution/gitops-manifest.git
     targetRevision: main
-    path: manifest/keycloak/base
+    path: manifest/cert-issuer
   syncPolicy:
     automated:
       prune: true
