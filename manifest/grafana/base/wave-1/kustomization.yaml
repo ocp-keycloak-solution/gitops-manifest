@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - default-sa-role.yaml
-  - prometheus-role.yaml
   - grafana.yaml
   - grafana-postgres-dashboard-config.yaml
   - grafana-ds-config.yaml
