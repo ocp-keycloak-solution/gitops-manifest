@@ -21,10 +21,6 @@ spec:
     security:
       admin_password: admin
       admin_user: root
-    persistence:
-      accessModes: ReadWriteOnce
-      enabled: 'true'
-      size: 5Gi
   deployment:
     spec:
       template:
