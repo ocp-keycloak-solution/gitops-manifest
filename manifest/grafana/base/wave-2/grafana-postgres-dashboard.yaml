@@ -1,0 +1,13 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: postgres-db-dashboard
+  labels:
+    app: grafana
+spec:
+  configMapRef:
+    name: grafana-postgres-dashboard-config
+    key: postgres-db.json
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana 

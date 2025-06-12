@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgres
+        env:
+        - name: POSTGRESQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: postgresql-secret
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: postgresql-secret
+        - name: POSTGRESQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: database-name
+              name: postgresql-secret
+        - name: POSTGRESQL_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgres-admin-password
+              name: postgresql-secret
+        image: "registry.redhat.io/rhel10/postgresql-16"
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+            - name: postgresql-persistent-data
+              mountPath: /var/lib/pgsql/data      
+            - name: tls
+              mountPath: /etc/postgres-tls
+            - name: config
+              mountPath: /opt/app-root/src/postgresql-cfg/postgresql.conf
+              subPath: postgresql.conf
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        readinessProbe:
+          timeoutSeconds: 1
+          initialDelaySeconds: 5
+          exec:
+            command:
+            - "/bin/sh"
+            - "-i"
+            - "-c"
+            - psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c
+              'SELECT 1'
+        livenessProbe:
+          timeoutSeconds: 1
+          initialDelaySeconds: 30
+          tcpSocket:
+            port: 5432
+        securityContext:
+          capabilities: {}
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+      - name: postgres-exporter
+        image: quay.io/prometheuscommunity/postgres-exporter
+        env:
+          - name: DATA_SOURCE_URI
+            value: localhost:5432/keycloak?sslmode=require
+          - name: DATA_SOURCE_USER
+            value: postgres
+          - name: DATA_SOURCE_PASS 
+            valueFrom:
+              secretKeyRef:
+                key: postgres-admin-password
+                name: postgresql-secret
+        ports:
+        - containerPort: 9187
+        command:
+        - /bin/sh
+        - -c
+        - |
+          exec /bin/postgres_exporter --collector.postmaster --web.listen-address=:9187
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 9187
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+      volumes:
+        - name: tls
+          projected:
+            sources:
+              - secret:
+                  name: postgres-tls
+            defaultMode: 0400 
+        - name: config
+          configMap:
+            name: postgres-config
+        - name: postgresql-persistent-data
+          persistentVolumeClaim:
+            claimName: postgresql-pvc

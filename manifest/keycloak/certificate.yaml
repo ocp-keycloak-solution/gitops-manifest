@@ -16,6 +16,5 @@ spec:
     - keycloak-platform-instance-service
     - keycloak-platform-instance-service.keycloak.svc
     - keycloak-platform-instance-service.keycloak.svc.cluster.local
-    - keycloak.apps.cluster.example.io # Replace with your actual domain name
   usages:
     - server auth

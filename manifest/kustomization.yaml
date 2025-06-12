@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - keycloak/application-dev.yaml
   - postgres/application.yaml
+  - grafana/application.yaml
   - openshift-monitoring/application.yaml
   - cert-issuer/application.yaml
   - openshift-oauth/application.yaml

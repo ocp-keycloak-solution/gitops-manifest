@@ -9,9 +9,7 @@ spec:
   instances: 1 
   db:
     vendor: postgres
-    host: postgresql # Service name of PostgreSQL
-    database: keycloak #
-    port: 5432 # Default PostgreSQL port, can be omitted if using default
+    url: "jdbc:postgresql://postgresql:5432/keycloak?sslmode=require"
     usernameSecret:
       name:  postgresql-secret
       key: database-user # Must match secretKey in postgres/postgres-secret.yaml
@@ -28,6 +26,7 @@ spec:
   additionalOptions:
     - name: metrics-enabled
       value: 'true'
+  
 
   
  
