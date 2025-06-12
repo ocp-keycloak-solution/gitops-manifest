@@ -13,6 +13,9 @@ spec:
     - port: metrics            # Name of the port exposed in the Service (see below)
       path: /metrics
       interval: 15s
+      scheme: https # The service port is 'https'
+      tlsConfig:
+        insecureSkipVerify: true # Set to true if you are using self-signed certificates
       scrapeTimeout: 10s
       relabelings:
         - action: replace
