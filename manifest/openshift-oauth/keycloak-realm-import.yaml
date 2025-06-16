@@ -1,0 +1,113 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: KeycloakRealmImport
+metadata:
+  name: openshift-realm-import
+  namespace: keycloak
+spec:
+  keycloakCRName: keycloak-platform-instance
+  realm:
+    id: openshift
+    realm: openshift
+    displayName: "OpenShift Authentication"
+    enabled: true
+    sslRequired: "external"
+    accessTokenLifespan: 300
+    ssoSessionIdleTimeout: 1800
+    ssoSessionMaxLifespan: 36000
+    accessCodeLifespan: 60
+    accessCodeLifespanUserAction: 300
+
+    # Users section with admin user
+    users:
+      - username: "keycloak-admin"
+        enabled: true
+        email: "admin@example.com"
+        firstName: "Keycloak"
+        lastName: "Administrator"
+        emailVerified: true
+        credentials:
+          - type: "password"
+            value: "admin123"  # Change this to a secure password
+            temporary: false
+        realmRoles:
+          - "admin"
+          - "cluster-admin"
+        clientRoles:
+          account:
+            - "manage-account"
+            - "view-profile"
+      
+      - username: "openshift-admin"
+        enabled: true
+        email: "openshift-admin@example.com"
+        firstName: "OpenShift"
+        lastName: "Administrator"
+        emailVerified: true
+        credentials:
+          - type: "password"
+            value: "openshift123"  # Change this to a secure password
+            temporary: false
+        realmRoles:
+          - "admin"
+          - "cluster-admin"
+    
+    
+    # Groups
+    groups:
+      - name: cluster-admins
+        path: /cluster-admins
+        attributes:
+          openshift-role: ["cluster-admin"]
+      - name: developers
+        path: /developers
+        attributes:
+          openshift-role: ["basic-user"]
+    
+    # Roles
+    roles:
+      realm:
+        - name: openshift-admin
+          description: "OpenShift Cluster Administrator"
+        - name: openshift-developer
+          description: "OpenShift Developer"
+       
+    
+    # Clients
+    clients:
+      # OpenShift OAuth Client
+      - clientId: openshift-client
+        name: "OpenShift Console"
+        description: "OpenShift Console OAuth Client"
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: false
+        implicitFlowEnabled: false
+        standardFlowEnabled: true
+        secret: "placeholder-will-be-updated"
+        redirectUris:
+          - "https://oauth-openshift.apps.cluster.example.com/oauth2callback/keycloak"
+        webOrigins:
+          - "https://console-openshift-console.apps.cluster.example.com"
+          - "https://oauth-openshift.apps.cluster.example.com"
+        protocolMappers:
+          - name: "groups"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-group-membership-mapper"
+            config:
+              "access.token.claim": "true"
+              "claim.name": "groups"
+              "id.token.claim": "true"
+              "userinfo.token.claim": "true"
+          - name: "preferred_username"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-property-mapper"
+            config:
+              "access.token.claim": "true"
+              "claim.name": "preferred_username"
+              "id.token.claim": "true"
+              "user.attribute": "username"
+              "userinfo.token.claim": "true"
+      
+     

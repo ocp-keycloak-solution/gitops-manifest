@@ -1,0 +1,31 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: keycloak
+    mappingMethod: claim
+    type: OpenID
+    openID:
+      clientID: openshift-client
+      clientSecret:
+        name: keycloak-oauth-secret
+      extraScopes:
+      - email
+      - profile
+      extraAuthorizeParameters:
+        include_granted_scopes: "true"
+      claims:
+        preferredUsername:
+        - preferred_username
+        - username
+        name:
+        - given_name
+        - name
+        email:
+        - email
+        groups:
+        - groups
+      issuer: https://keycloak.apps.cluster.example.io/realms/openshift
+
