@@ -35,10 +35,7 @@ spec:
           description: "OpenShift Cluster Administrator"
         - name: openshift-developer
           description: "OpenShift Developer"
-        - name: argo-admin
-          description: "ArgoCD Administrator"
-        - name: argo-readonly
-          description: "ArgoCD Read-Only User"
+       
     
     # Clients
     clients:
@@ -78,37 +75,4 @@ spec:
               "user.attribute": "username"
               "userinfo.token.claim": "true"
       
-      # ArgoCD OAuth Client
-      - clientId: argocd-client
-        name: "ArgoCD"
-        description: "ArgoCD OIDC Client"
-        enabled: true
-        protocol: openid-connect
-        publicClient: false
-        directAccessGrantsEnabled: false
-        serviceAccountsEnabled: false
-        implicitFlowEnabled: false
-        standardFlowEnabled: true
-        secret: "placeholder-will-be-updated"
-        redirectUris:
-          - "https://openshift-gitops-server-openshift-gitops.apps.cluster.example.com/auth/callback"
-        webOrigins:
-          - "https://openshift-gitops-server-openshift-gitops.apps.cluster.example.com"
-        protocolMappers:
-          - name: "groups"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-group-membership-mapper"
-            config:
-              "access.token.claim": "true"
-              "claim.name": "groups"
-              "id.token.claim": "true"
-              "userinfo.token.claim": "true"
-          - name: "preferred_username"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-property-mapper"
-            config:
-              "access.token.claim": "true"
-              "claim.name": "preferred_username"
-              "id.token.claim": "true"
-              "user.attribute": "username"
-              "userinfo.token.claim": "true"
+     

@@ -1,9 +1,0 @@
-apiVersion: config.openshift.io/v1
-kind: OAuth
-metadata:
-  name: cluster
-spec:
-  identityProviders:
-  - name: keycloak
-    openID:
-      issuer: https://keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io/realms/openshift

@@ -28,12 +28,4 @@ spec:
         groups:
         - groups
       issuer: https://keycloak.apps.cluster.example.io/realms/openshift
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: keycloak-oauth-secret
-  namespace: openshift-config
-type: Opaque
-stringData:
-  clientSecret: "your-openshift-client-secret" # This should be replaced with actual secret
+
