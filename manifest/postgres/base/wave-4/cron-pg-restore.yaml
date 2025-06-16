@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg-restore
+spec:
+  schedule: "0 0 31 2 *"  # This date never exists, so the job will never trigger, only trigger manually
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pg-restore
+              image: "registry.redhat.io/rhel10/postgresql-16"
+              volumeMounts:
+                - mountPath: /backup
+                  name: backup-volume
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgresql-secret
+                      key: postgres-admin-password
+                - name: PGUSER
+                  value: postgres
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: postgresql-secret
+                - name: PGHOST
+                  value: postgresql
+                - name: PGSSLMODE
+                  value: require
+                - name: DUMP_FILE
+                  value: /backup/keycloak_latest.dump
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  echo "Running pg_restore..."
+                  
+                  pg_restore -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -Fc "$DUMP_FILE"
+                 
+                  echo "finished restore"
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: postgresql-backup-pvc
+          restartPolicy: OnFailure

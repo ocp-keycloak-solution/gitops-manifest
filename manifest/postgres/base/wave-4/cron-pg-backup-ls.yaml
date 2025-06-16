@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg-backup-list
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pg-ls
+              image: "registry.redhat.io/rhel10/postgresql-16"
+              volumeMounts:
+                - mountPath: /backup
+                  name: backup-volume
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgresql-secret
+                      key: postgres-admin-password
+                - name: PGUSER
+                  value: postgres
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: postgresql-secret
+                - name: PGHOST
+                  value: postgresql
+                - name: PGSSLMODE
+                  value: require
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  ls /backup/*
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: postgresql-backup-pvc
+          restartPolicy: OnFailure
