@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg-backup
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pg-dump
+              image: "registry.redhat.io/rhel10/postgresql-16"
+              volumeMounts:
+                - mountPath: /backup
+                  name: backup-volume
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgresql-secret
+                      key: postgres-admin-password
+                - name: PGUSER
+                  value: postgres
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: postgresql-secret
+                - name: PGHOST
+                  value: postgresql
+                - name: PGSSLMODE
+                  value: require
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  echo "removed backup old than 7 days"
+                  find /backup -name '*.dump' -mtime +7 -delete
+
+                  echo "start backup"
+
+                  TIMESTAMP=$(date +%Y%m%d%H%M%S)
+                  pg_dump -Fc -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -f /backup/keycloak_$TIMESTAMP.dump
+                  ln -sf /backup/keycloak_$TIMESTAMP.dump /backup/keycloak_latest.dump
+
+                  echo "finished backup /backup/keycloak_$TIMESTAMP.dump"
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: postgresql-backup-pvc
+          restartPolicy: OnFailure
