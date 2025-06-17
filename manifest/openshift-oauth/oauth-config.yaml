@@ -30,7 +30,6 @@ spec:
         - groups
       issuer: https://keycloak.apps.cluster.example.io/realms/openshift
   
-  templates:
-      login:
-        providerSelection: true
+
+
 
