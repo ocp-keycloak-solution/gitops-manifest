@@ -5,3 +5,6 @@ resources:
   - keycloak.yaml # Keycloak CR
   - certificate.yaml # TLS certificate
   - service-monitor.yaml # ServiceMonitor for Prometheus
+  - keycloak-backup-pvc.yaml
+  - cron-export-realm.yaml
+  - cron-import-realm.yaml

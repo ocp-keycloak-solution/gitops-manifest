@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: keycloak-export-realm
+spec:
+  schedule: "0 2 * * *"  # daily at 2:00 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: keycloak-export
+            image: registry.redhat.io/rhbk/keycloak-rhel9@sha256:16fb22cfaf27bf9eb7a11e873dc251bef8ff77e2e6a09c70c2c8a3cefa3d0aa5
+            env:
+              - name: EXPORT_REALM
+                value: master   # export realm id 
+              - name: KC_DB
+                value: postgres
+              - name: KC_DB_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: postgresql-secret
+                    key: database-user
+              - name: KC_DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgresql-secret
+                    key: database-password
+              - name: KC_DB_URL
+                value: 'jdbc:postgresql://postgresql:5432/keycloak?sslmode=require'
+              - name: KC_CACHE
+                value: "local"            
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                TIMESTAMP=$(date +%Y%m%d%H%M%S)
+                
+                find /keycloak-backup -type d -name 'export-*' -mtime +7 -exec rm -rf {} +
+
+                /opt/keycloak/bin/kc.sh export \
+                  --realm=$EXPORT_REALM \
+                  --dir=/keycloak-backup/export_$TIMESTAMP \
+                  --users=same_file \
+                  --users-per-file=1000 
+
+                ln -sf /keycloak-backup/export_$TIMESTAMP /keycloak-backup/export_latest
+            volumeMounts:
+              - name: backup-volume
+                mountPath: /keycloak-backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: keycloak-backup-pvc

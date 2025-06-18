@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: keycloak-import-realm
+spec:
+  schedule: "0 0 31 2 *"  # This date never exists, so the job will never trigger, only trigger manually
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: keycloak-export
+            image: registry.redhat.io/rhbk/keycloak-rhel9@sha256:16fb22cfaf27bf9eb7a11e873dc251bef8ff77e2e6a09c70c2c8a3cefa3d0aa5
+            env:
+              - name: EXPORT_DIR
+                value: export_latest # directory contains the import files
+              - name: EXPORT_REALM
+                value: master
+              - name: KC_DB
+                value: postgres
+              - name: KC_DB_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: postgresql-secret
+                    key: database-user
+              - name: KC_DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgresql-secret
+                    key: database-password
+              - name: KC_DB_URL
+                value: 'jdbc:postgresql://postgresql:5432/keycloak?sslmode=require'
+              - name: KC_CACHE
+                value: "local"            
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+              
+                /opt/keycloak/bin/kc.sh import \
+                  --dir=/keycloak-backup/$EXPORT_DIR
+
+            volumeMounts:
+              - name: backup-volume
+                mountPath: /keycloak-backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: keycloak-backup-pvc
