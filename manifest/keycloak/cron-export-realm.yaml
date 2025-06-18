@@ -42,8 +42,15 @@ spec:
                   --dir=/keycloak-backup/export_$TIMESTAMP \
                   --users=same_file \
                   --users-per-file=1000 
-
+                
+                if [ -d /keycloak-backup/export_latest ]; then
+                  rm -rf /keycloak-backup/export_latest
+                fi
+                
                 ln -sf /keycloak-backup/export_$TIMESTAMP /keycloak-backup/export_latest
+                
+                echo "exported files"
+                ls /keycloak-backup/export_latest
             volumeMounts:
               - name: backup-volume
                 mountPath: /keycloak-backup
