@@ -12,10 +12,8 @@ spec:
           - name: keycloak-export
             image: registry.redhat.io/rhbk/keycloak-rhel9@sha256:16fb22cfaf27bf9eb7a11e873dc251bef8ff77e2e6a09c70c2c8a3cefa3d0aa5
             env:
-              - name: EXPORT_DIR
-                value: export_latest # directory contains the import files
-              - name: EXPORT_REALM
-                value: master
+              - name: BACKUP_DIR
+                value: export-master-latest # directory contains the import files, the default dir that cron_export use is export_master_latest
               - name: KC_DB
                 value: postgres
               - name: KC_DB_USERNAME
@@ -35,9 +33,10 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
-              
+                ls -l /keycloak-backup/$BACKUP_DIR
+
                 /opt/keycloak/bin/kc.sh import \
-                  --dir=/keycloak-backup/$EXPORT_DIR
+                  --dir=/keycloak-backup/$BACKUP_DIR
 
             volumeMounts:
               - name: backup-volume
