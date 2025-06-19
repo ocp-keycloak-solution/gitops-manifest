@@ -19,6 +19,7 @@ spec:
 
     # Users section with admin user
     users:
+
       - username: "keycloak-admin"
         enabled: true
         email: "admin@example.com"
@@ -50,6 +51,19 @@ spec:
         realmRoles:
           - "admin"
           - "cluster-admin"
+
+      - username: "group-sync-svc"
+        enabled: true
+        email: ""
+        emailVerified: true
+        clientRoles:
+          - "query-groups"
+          - "query-users"
+          - "view-users"
+        credentials:
+          - type: "password"
+            value: "openshift123"  # Change this to a secure password
+            temporary: false
     
     
     # Groups
