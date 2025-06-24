@@ -37,6 +37,11 @@ spec:
           account:
             - "manage-account"
             - "view-profile"
+        groups:
+          - "cluster-admins"
+          - "developers"
+          - "ssoadmin"
+          - "admin"
       
       - username: "openshift-admin"
         enabled: true
@@ -51,6 +56,11 @@ spec:
         realmRoles:
           - "admin"
           - "cluster-admin"
+        groups:
+          - "cluster-admins"
+          - "developers"
+          - "ssoadmin"
+          - "admin"
 
       - username: "group-sync-svc"
         enabled: true
@@ -76,6 +86,14 @@ spec:
         path: /developers
         attributes:
           openshift-role: ["basic-user"]
+      - name: ssoadmin
+        path: /ssoadmin
+        attributes: 
+          openshift-role: ["ssoadmin"]
+      - name: admin
+        path: /admin
+        attributes: 
+          openshift-role: ["admin"]
     
     # Roles
     roles:
