@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: quay-operator
+  namespace: quay-registry
+spec:
+  targetNamespaces:
+    - quay-registry
+  upgradeStrategy: Default
