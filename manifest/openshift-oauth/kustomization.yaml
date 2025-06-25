@@ -2,6 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - keycloak-group-sync-secret.yaml
+  - keycloak-group-sync.yaml
   - keycloak-oauth-secret.yaml
   - keycloak-realm-import.yaml
-  - oauth-config.yaml
+  - oauth-config.yaml 
+  - clusterrolebinding-cluster-admins.yaml
