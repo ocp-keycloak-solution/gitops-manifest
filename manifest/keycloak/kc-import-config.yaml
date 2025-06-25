@@ -1,0 +1,29 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kc-import-config
+data:
+  patch-realm.sh: |
+    #!/bin/bash
+
+    mappings_file="$1"
+    target_file="$2"
+
+    echo "Patching $target_file"
+
+    if [[ ! -f "$mappings_file" || ! -f "$target_file" ]]; then
+      echo "Usage: $0 <mappings_file> <target_file>"
+      exit 1
+    fi
+    
+    while read -r old new || [ -n "$old" ]; do
+      [[ -z "$old" || "$old" =~ ^# ]] && continue
+      echo "Replacing '$old' -> '$new'"
+      sed -i "s|${old}|${new}|g" "$target_file"
+    done < "$mappings_file"
+  
+  mappings.txt: |
+    # old-value new-value
+    https://abc.com/hello https://abc2.com/hello
+    https://a1.com/hello https://b1.com/hello
+    https://a2.com/hello https://b1.com/hello

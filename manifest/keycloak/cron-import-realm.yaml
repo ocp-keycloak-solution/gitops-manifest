@@ -12,6 +12,8 @@ spec:
           - name: keycloak-export
             image: registry.redhat.io/rhbk/keycloak-rhel9@sha256:16fb22cfaf27bf9eb7a11e873dc251bef8ff77e2e6a09c70c2c8a3cefa3d0aa5
             env:
+              - name: REALM_FILE
+                value: master-realm.json
               - name: BACKUP_DIR
                 value: /keycloak-backup/export-master-latest # directory contains the import files, the default dir that cron_export use is export_master_latest
               - name: KC_DB
@@ -33,6 +35,9 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
+          
+                source /kc-config/patch-realm.sh /kc-config/mappings.txt $BACKUP_DIR/$REALM_FILE
+
                 echo "import from $BACKUP_DIR"
 
                 /opt/keycloak/bin/kc.sh import \
@@ -41,8 +46,13 @@ spec:
             volumeMounts:
               - name: backup-volume
                 mountPath: /keycloak-backup
+              - name: config
+                mountPath: /kc-config
           restartPolicy: OnFailure
           volumes:
             - name: backup-volume
               persistentVolumeClaim:
                 claimName: keycloak-backup-pvc
+            - name: config
+              configMap:
+                name: kc-import-config
