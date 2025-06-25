@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: keycloak-import-realm
+  name: keycloak-import-realm-minio
 spec:
   schedule: "0 0 31 2 *"  # This date never exists, so the job will never trigger, only trigger manually
   jobTemplate:
@@ -13,7 +13,7 @@ spec:
             image: registry.redhat.io/rhbk/keycloak-rhel9@sha256:16fb22cfaf27bf9eb7a11e873dc251bef8ff77e2e6a09c70c2c8a3cefa3d0aa5
             env:
               - name: BACKUP_DIR
-                value: /keycloak-backup/export-master-latest # directory contains the import files, the default dir that cron_export use is export_master_latest
+                value: /keycloak-backup/minio/export-master-latest # directory contains the import files, the default dir that cron_export use is export_master_latest
               - name: KC_DB
                 value: postgres
               - name: KC_DB_USERNAME

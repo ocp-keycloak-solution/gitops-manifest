@@ -8,3 +8,6 @@ resources:
   - keycloak-backup-pvc.yaml
   - cron-export-realm.yaml
   - cron-import-realm.yaml
+  - cron-import-realm-minio.yaml
+  - cron-minio-upload.yaml
+  - cron-minio-download.yaml
