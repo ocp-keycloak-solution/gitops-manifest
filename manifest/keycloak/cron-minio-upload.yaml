@@ -20,6 +20,13 @@ spec:
                 SRC_DIR=/keycloak-backup/$EXPORT_DIR/
                 MINIO_TGT=myminio/$MINIO_BUCKET/$EXPORT_DIR
             
+                if mc stat myminio/$MINIO_BUCKET > /dev/null 2>&1; then
+                  echo "Bucket $MINIO_BUCKET exists"
+                else
+                  echo "Bucket $MINIO_BUCKET does not exist, creating..."
+                  mc mb myminio/$MINIO_BUCKET
+                fi
+                
                 echo "upload $SRC_DIR to $MINIO_TGT"
 
                 mc cp --recursive $SRC_DIR $MINIO_TGT
