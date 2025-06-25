@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: minio-upload
+spec:
+  schedule: "0 2 * * *"  # daily at 2:00 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: upload-minio
+            image: minio/mc:latest
+            command:
+              - sh
+              - -c
+              - |
+                export HOME=/tmp
+                mc alias set myminio $MINIO_URL $MINIO_USER $MINIO_PASSWORD && \
+                SRC_DIR=/keycloak-backup/$EXPORT_DIR/
+                MINIO_TGT=myminio/$MINIO_BUCKET/$EXPORT_DIR
+            
+                echo "upload $SRC_DIR to $MINIO_TGT"
+
+                mc cp --recursive $SRC_DIR $MINIO_TGT
+            env:
+              - name: MINIO_URL
+                value: "https://minio-api-keycloak.apps.cluster-pngcm.pngcm.sandbox2375.opentlc.com"
+              - name: MINIO_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: minio-secret
+                    key: root-user
+              - name: MINIO_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: minio-secret
+                    key: root-password
+              - name: MINIO_BUCKET
+                value: keycloak-realm-backup
+              - name: EXPORT_DIR
+                value: export-master-latest
+            volumeMounts:
+              - name: backup-volume
+                mountPath: /keycloak-backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: keycloak-backup-pvc
