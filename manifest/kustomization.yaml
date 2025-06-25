@@ -7,3 +7,4 @@ resources:
   - grafana/application.yaml
   - openshift-monitoring/application.yaml
   - cert-issuer/application.yaml
+  - minio/application.yaml
