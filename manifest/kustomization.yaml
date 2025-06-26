@@ -2,9 +2,16 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - keycloak/application-dev.yaml
-  - postgres/application.yaml
-  - grafana/application.yaml
-  - openshift-monitoring/application.yaml
   - cert-issuer/application.yaml
-  - minio/application.yaml
+  - postgres/application.yaml
+  # - postgres-export/application.yaml
+  # - postgres-import/application.yaml
+  - keycloak/application.yaml
+  # - minio/application.yaml
+  # - keycloak-export/application.yaml
+  # - keycloak-import/application.yaml
+  - openshift-oauth/application.yaml
+  - openshift-group-sync/application.yaml
+  - openshift-monitoring/application.yaml
+  - grafana/application.yaml
+  # - quay/application.yaml

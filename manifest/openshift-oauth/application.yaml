@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: keycloak
+  name: openshift-oauth
   namespace: openshift-gitops
 spec:
   project: default
@@ -11,10 +11,17 @@ spec:
   source:
     repoURL: https://github.com/ocp-keycloak-solution/gitops-manifest.git
     targetRevision: main
-    path: manifest/keycloak
+    path: manifest/openshift-oauth
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: v4-0-config-user-idp-0-client-secret
+      namespace: openshift-authentication
+      jsonPointers:
+        - /data/clientSecret
