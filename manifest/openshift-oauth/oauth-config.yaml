@@ -8,7 +8,6 @@ spec:
     mappingMethod: claim
     type: OpenID
     openID:
-      ca: {}
       clientID: openshift-client
       clientSecret:
         name: keycloak-oauth-secret
