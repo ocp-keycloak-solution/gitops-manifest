@@ -13,7 +13,7 @@ spec:
             image: registry.redhat.io/rhbk/keycloak-rhel9@sha256:16fb22cfaf27bf9eb7a11e873dc251bef8ff77e2e6a09c70c2c8a3cefa3d0aa5
             env:
               - name: REALM
-                value: master 
+                value: openshift 
               - name: KC_DB
                 value: postgres
               - name: KC_DB_USERNAME
@@ -43,8 +43,7 @@ spec:
                 /opt/keycloak/bin/kc.sh export \
                   --realm=$REALM \
                   --dir=$EXPORT_DIR \
-                  --users=same_file \
-                  --users-per-file=1000 
+                  --users=realm_file
                 
                 if [ -d $EXPORT_DIR_LATEST ]; then
                   rm -rf $EXPORT_DIR_LATEST

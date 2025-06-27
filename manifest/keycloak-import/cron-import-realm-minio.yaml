@@ -36,7 +36,7 @@ spec:
             args:
               - |
                 
-                source /kc-config/patch-realm.sh /kc-config/mappings.txt $BACKUP_DIR/$REALM_FILE
+                # source /kc-config/patch-realm.sh /kc-config/mappings.txt $BACKUP_DIR/$REALM_FILE
 
                 echo "import from $BACKUP_DIR"
 

@@ -9,7 +9,7 @@ spec:
       template:
         spec:
           containers:
-          - name: upload-minio
+          - name: download-minio
             image: minio/mc:latest
             command:
               - sh
