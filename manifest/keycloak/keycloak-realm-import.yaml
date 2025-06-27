@@ -59,7 +59,7 @@ spec:
       # Group Sync Service Account
       - username: "group-sync-svc"
         enabled: true
-        email: ""
+        email: "group-sync-svc@example.com"
         emailVerified: true
         clientRoles:
           openshift-client:
@@ -134,7 +134,7 @@ spec:
        
         consentRequired: false
            
-        publicClient: false
+        publicClient: true
         directAccessGrantsEnabled: false
         serviceAccountsEnabled: false
         implicitFlowEnabled: false
