@@ -2,7 +2,6 @@ apiVersion: k8s.keycloak.org/v2alpha1
 kind: Keycloak
 metadata:
   name: keycloak-platform-instance # Renamed for clarity
-  namespace: keycloak
   labels:
     app: keycloak-platform # Label for KeycloakRealm's instanceSelector
 spec:
