@@ -8,6 +8,7 @@ spec:
     mappingMethod: claim
     type: OpenID
     openID:
+      ca: {}
       clientID: openshift-client
       clientSecret:
         name: keycloak-oauth-secret
@@ -35,7 +36,7 @@ spec:
     type: HTPasswd
     htpasswd:
       fileData:
-        name: htpasswd-secret
+        name: htpasswd
       
 
 

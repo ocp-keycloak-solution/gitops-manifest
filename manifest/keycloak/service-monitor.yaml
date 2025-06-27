@@ -2,13 +2,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: keycloak-metrics
-  namespace: keycloak # You can create this in the 'keycloak' namespace.
-                      # The OpenShift monitoring stack usually discovers ServiceMonitors
-                      # in other namespaces if properly configured (often  by default).
-                      # Alternatively, create it in 'openshift-user-workload-monitoring'
-                      # or your specific Prometheus namespace if  'keycloak' doesn't work.
-  labels:
-      # You can add a label if your Prometheus specifically looks for it, e.g.: k8s-app: keycloak-metrics
 spec:
   selector:
     matchLabels:

@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: keycloak
+  name: openshift-group-sync
   namespace: openshift-gitops
 spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: keycloak
+    namespace: group-sync-operator
   source:
     repoURL: https://github.com/ocp-keycloak-solution/gitops-manifest.git
     targetRevision: main
-    path: manifest/keycloak
+    path: manifest/openshift-group-sync
   syncPolicy:
     automated:
       prune: true

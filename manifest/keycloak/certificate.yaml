@@ -3,7 +3,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-tls
-  namespace: keycloak # Replace with the namespace ofyour Keycloak instance
 spec:
   secretName: keycloak-tls # This secret will store the TLS certificate
   
