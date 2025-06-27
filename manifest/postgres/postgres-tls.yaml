@@ -9,6 +9,7 @@ metadata:
 spec:
   commonName: postgres
   dnsNames:
+   - postgresql
    - postgresql.keycloak.svc
    - postgresql.keycloak.svc.cluster.local
   duration: 2160h
