@@ -6,7 +6,6 @@ resources:
   - grafana-ds-config.yaml
   - grafana-postgres-dashboard-config.yaml
   - grafana-postgres-dashboard.yaml
-  - grafana-rbac.yaml
   - grafana-sa-token-secret.yaml
   - grafana.yaml
   - grafana-proxy-secret.yaml
