@@ -46,7 +46,16 @@ spec:
             configMap:
               name: ocp-injected-certs
           containers:
-            - args:
+            - name: grafana
+              readinessProbe:
+                failureThreshold: 3
+              volumes:
+                - name: grafana-data
+                  persistentVolumeClaim:
+                    claimName: grafana-pvc
+            - image: 'quay.io/openshift/origin-oauth-proxy'
+              name: grafana-proxy
+              args:
                 - '-provider=openshift'
                 - '-pass-basic-auth=false'
                 - '-https-address=:9091'
@@ -64,8 +73,6 @@ spec:
                 - '-openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'
                 - '-openshift-ca=/etc/proxy/certs/ca-bundle.crt'
                 - '-skip-auth-regex=^/metrics'
-              image: 'quay.io/openshift/origin-oauth-proxy'
-              name: grafana-proxy
               ports:
                 - containerPort: 9091
                   name: https
