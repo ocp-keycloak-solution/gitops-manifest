@@ -11,4 +11,5 @@ resources:
   - grafana-proxy-secret.yaml
   - grafana-proxy-role.yaml
   - grafana-rbac.yaml
+  - grafana-route-pwd.yaml
   - grafana-ds-job.yaml
