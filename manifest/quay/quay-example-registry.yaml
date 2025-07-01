@@ -1,0 +1,39 @@
+apiVersion: quay.redhat.com/v1
+kind: QuayRegistry
+metadata:
+  name: example
+  namespace: quay-registry
+spec:
+  components:
+    - managed: true
+      kind: quay
+      overrides:
+        env:
+          - name: DEBUGLOG
+            value: 'true'
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            memory: 4Gi
+
+    - managed: true
+      kind: postgres
+    - managed: true
+      kind: objectstorage
+    - managed: true
+      kind: redis
+    - managed: false
+      kind: horizontalpodautoscaler
+    - managed: true
+      kind: route
+    - managed: true
+      kind: mirror
+    - managed: false
+      kind: monitoring
+    - managed: true
+      kind: tls
+
+  
+
+
