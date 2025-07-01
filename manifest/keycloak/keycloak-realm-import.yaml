@@ -156,4 +156,40 @@ spec:
               "user.attribute": "username"
               "userinfo.token.claim": "true"
       
+           # QUAY 
+      - clientId: quay-client
+        name: "Quay Registry"
+        description: "Quay Registry OAuth Client"
+        enabled: true
+        protocol: openid-connect
+        defaultClientScopes:
+          - "openid"
+          - "profile"
+          - "email"
+          - "groups"
+       
+        consentRequired: false
+           
+        publicClient: true
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: false
+        implicitFlowEnabled: false
+        standardFlowEnabled: true
+        secret: QUAY_CLIENT_SECRET_PLACEHOLDER  # Replace with actual secret
+        redirectUris:
+          - "https://example-quay-quay-registry.apps.cluster-8pq26.dynamic.redhatworkshops.io/oauth2/oidc/callback"
+        webOrigins:
+          - "https://example-quay-quay-registry.apps.cluster-8pq26.dynamic.redhatworkshops.io"
+        protocolMappers:
+          - name: "preferred_username"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-property-mapper"
+            config:
+              "access.token.claim": "true"
+              "claim.name": "preferred_username"
+              "id.token.claim": "true"
+              "user.attribute": "username"
+              "userinfo.token.claim": "true"
+      
      
+

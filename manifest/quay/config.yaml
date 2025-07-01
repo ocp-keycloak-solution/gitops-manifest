@@ -24,7 +24,7 @@ FEATURE_USER_INITIALIZE: true
 OIDC_LOGIN_CONFIG:
   OIDC_SERVER: "https://keycloak.apps.cluster-8pq26.dynamic.redhatworkshops.io/realms/openshift/"
   CLIENT_ID: "quay-client"
-  CLIENT_SECRET: "{theclientsecret}" 
+  CLIENT_SECRET: "QUAY_CLIENT_SECRET_PLACEHOLDER" 
   SERVICE_NAME: "Keycloak"
   OIDC_LOGIN_SCOPES:
     - "openid"
