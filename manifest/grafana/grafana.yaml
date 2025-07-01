@@ -46,10 +46,6 @@ spec:
             - name: grafana
               readinessProbe:
                 failureThreshold: 3
-              volumes:
-                - name: grafana-data
-                  persistentVolumeClaim:
-                    claimName: grafana-pvc
             - image: 'quay.io/openshift/origin-oauth-proxy'
               name: grafana-proxy
               args:
@@ -72,6 +68,7 @@ spec:
                 - '-skip-auth-regex=^/metrics'
               ports:
                 - containerPort: 9091
+                  protocol: TCP
                   name: https
               resources: { }
               volumeMounts:
