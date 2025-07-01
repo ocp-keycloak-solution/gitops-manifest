@@ -13,3 +13,4 @@ resources:
   - grafana-rbac.yaml
   - grafana-route-pwd.yaml
   - grafana-ds-job.yaml
+  - ocp-cert.yaml
