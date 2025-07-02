@@ -6,6 +6,8 @@ resources:
   - grafana-ds-config.yaml
   - grafana-postgres-dashboard-config.yaml
   - grafana-postgres-dashboard.yaml
+  - grafana-keycloak-capacity-planning-dashboard-config.yaml
+  - grafana-keycloak-capacity-planning-dashboard.yaml
   - grafana-keycloak-troubleshooting-dashboard-config.yaml
   - grafana-keycloak-troubleshooting-dashboard.yaml
   - grafana-sa-token-secret.yaml
