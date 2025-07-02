@@ -33,6 +33,6 @@ spec:
       kind: monitoring
     - managed: true
       kind: tls
-configBundleSecret: quay-config-bundle
+  configBundleSecret: quay-config-bundle
 
 
