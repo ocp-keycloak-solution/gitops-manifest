@@ -11,6 +11,23 @@ spec:
   - port: management 
     path: /metrics # The path to the metrics endpoint
     scheme: https # The service port is 'https'
+    relabelings:
+      - action: replace
+        sourceLabels:
+          - __meta_kubernetes_service_label_app
+        targetLabel: job
+      - action: replace
+        sourceLabels:
+          - __meta_kubernetes_namespace
+        targetLabel: namespace
+      - action: replace
+        sourceLabels:
+          - __meta_kubernetes_namespace
+        targetLabel: kubernetes_namespace
+      - action: replace
+        sourceLabels:
+          - __meta_kubernetes_pod_name
+        targetLabel: instance
     tlsConfig:
       serverName: keycloak-platform-instance-service.keycloak.svc.cluster.local 
       insecureSkipVerify: true # Set to true if you are using self-signed certificates
