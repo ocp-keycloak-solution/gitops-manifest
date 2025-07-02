@@ -25,6 +25,27 @@ spec:
   additionalOptions:
     - name: metrics-enabled
       value: 'true'
+    - name: http-metrics-histograms-enabled
+      value: 'true'
+    - name: cache-metrics-histograms-enabled
+      value: 'true'
+    - name: http-metrics-slos
+      value: 'true'
+    - name: event-metrics-user-enabled
+      value: 'true'
+    - name: event-metrics-user-tags
+      value: 'realm,idp,clientId'
+    - name: spi-events-listener-jboss-logging-success-level
+      value: info
+    - name: log-console-output
+      value: json
+    - name: http-max-queued-requests
+      value: '1000'
+    - name: http-pool-max-threads
+      value: '50'
+    - name: log-level
+      value: INFO
+  
   
 
   

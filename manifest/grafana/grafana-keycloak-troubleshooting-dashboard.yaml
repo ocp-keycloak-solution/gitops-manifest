@@ -1,0 +1,13 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: keycloak-troubleshooting-dashboard
+  labels:
+    app: grafana
+spec:
+  configMapRef:
+    name: grafana-keycloak-troubleshooting-dashboard-config
+    key: keycloak-troubleshooting-dashboard.json
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana 
