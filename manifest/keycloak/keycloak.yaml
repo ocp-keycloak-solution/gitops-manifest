@@ -30,7 +30,7 @@ spec:
     - name: cache-metrics-histograms-enabled
       value: 'true'
     - name: http-metrics-slos
-      value: 'true'
+      value: '5,10,25,50,250,500,1000,2500,5000,10000'
     - name: event-metrics-user-enabled
       value: 'true'
     - name: event-metrics-user-tags
