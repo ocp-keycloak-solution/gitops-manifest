@@ -6,3 +6,4 @@ resources:
   - keycloak-realm-import.yaml
   - certificate.yaml
   - service-monitor.yaml
+  - keycloak-alerts.yaml

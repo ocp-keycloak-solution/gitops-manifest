@@ -1,0 +1,99 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: keycloak-alerts
+  namespace: keycloak
+spec:
+  groups:
+    - name: keycloak-availability
+      rules:
+        - alert: KeycloakDown
+          expr: absent(up{job="keycloak"} == 1)
+          for: 2m
+          labels:
+            severity: critical
+            app: keycloak
+          annotations:
+            summary: "Keycloak is down"
+            description: |
+              No 'up' metrics received for the Keycloak service. This means Prometheus cannot reach Keycloak at all.
+        - alert: Keycloak5xxErrors
+          expr: rate(http_server_requests_seconds_count{status=~"5..", job="keycloak"}[5m]) > 0.1
+          for: 2m
+          labels:
+            severity: warning
+            app: keycloak
+          annotations:
+            summary: "High rate of 5xx errors from Keycloak"
+            description: |
+              Keycloak is returning 5xx errors at a high rate (> 0.1/s) over the past 5 minutes. Check logs for stack traces or DB issues.
+        - alert: KeycloakHighLatency
+          expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{job="keycloak"}[5m])) > 1
+          for: 2m
+          labels:
+            severity: warning
+            app: keycloak
+          annotations:
+            summary: "High Keycloak response latency (95th percentile)"
+            description: |
+              The 95th percentile of response times is over 1 second for Keycloak. This may affect user experience or indicate backend issues.
+    - name: keycloak-cpu-memory
+      rules:
+        - alert: KeycloakPodHighCpuLimitUsage
+          expr: |
+            sum(rate(container_cpu_usage_seconds_total{container="keycloak", namespace="keycloak"}[5m])) by (pod)
+            /
+            sum(container_spec_cpu_quota{container="keycloak", namespace="keycloak"} / container_spec_cpu_period{container="keycloak", namespace="keycloak"}) by (pod)
+            > 0.9
+          for: 2m
+          labels:
+            severity: warning
+            app: keycloak
+          annotations:
+            summary: "Keycloak pod {{ $labels.pod }} is using over 90% of its CPU limit"
+            description: |
+              Pod {{ $labels.pod }} is using more than 90% of its allocated CPU limit over the last 5 minutes.
+              Consider increasing limits or investigating performance issues.
+        - alert: KeycloakHighMemory
+          expr: (container_memory_usage_bytes{container="keycloak", namespace="keycloak"} / container_spec_memory_limit_bytes{container="keycloak", namespace="keycloak"}) > 0.9
+          for: 2m
+          labels:
+            severity: warning
+            app: keycloak
+          annotations:
+            summary: "Keycloak memory usage is high"
+            description: |
+              Memory usage is above 90% of the container's memory limit.
+        - alert: KeycloakOOMKilled
+          expr: increase(container_oom_events_total{container="keycloak", namespace="keycloak"}[5m]) > 0
+          for: 1m
+          labels:
+            severity: critical
+            app: keycloak
+          annotations:
+            summary: "Keycloak container was OOM killed"
+            description: |
+              The Keycloak container was terminated by the kernel due to Out of Memory (OOM).
+    - name: keycloak-user-events
+      rules:
+        - alert: KeycloakFailedLoginSpike
+          expr: increase(keycloak_user_events_total{event="login", error!=""}[5m]) > 10
+          for: 2m
+          labels:
+            severity: warning
+            app: keycloak
+          annotations:
+            summary: "High rate of failed Keycloak login attempts"
+            description: "More than 10 failed login attempts occurred in the past 5 minutes."
+    - name: keycloak-database
+      rules:
+        - alert: KeycloakDBConnectionPoolExhausted
+          expr: agroal_available_count{container="keycloak"} < 1
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Keycloak DB connection pool exhausted"
+            description: |
+              Keycloak instance '{{ $labels.instance }}' has no available database connections.
+              The pool is exhausted — requests may fail or be delayed.
