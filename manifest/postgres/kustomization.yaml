@@ -9,3 +9,4 @@ resources:
   - postgres-deployment.yaml
   - postgres-service.yaml
   - service-monitor.yaml
+  - postgres-alerts.yaml
