@@ -6,6 +6,13 @@ metadata:
     app: keycloak-platform # Label for KeycloakRealm's instanceSelector
 spec:
   instances: 1 
+  resources:
+    limits:
+      cpu: 4
+      memory: 4Gi
+    requests:
+      cpu: 250m
+      memory: 1700Mi
   db:
     vendor: postgres
     url: "jdbc:postgresql://postgresql:5432/keycloak?sslmode=require"
@@ -15,7 +22,6 @@ spec:
     passwordSecret:
       name: postgresql-secret
       key: database-password # Must match secretKey in postgres/postgres-secret.yaml
-   
   http:
     tlsSecret: keycloak-tls
   hostname:
