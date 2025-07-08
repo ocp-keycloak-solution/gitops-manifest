@@ -1,7 +1,0 @@
-# https://github.com/argoproj/argo-cd/issues/5792
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: v4-0-config-user-idp-0-ca
-  namespace: openshift-authentication
-data:
