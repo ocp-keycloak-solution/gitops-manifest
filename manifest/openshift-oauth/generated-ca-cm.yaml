@@ -4,3 +4,4 @@ kind: ConfigMap
 metadata:
   name: v4-0-config-user-idp-0-ca
   namespace: openshift-authentication
+data:
