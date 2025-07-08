@@ -5,3 +5,4 @@ resources:
   - oauth-config.yaml
   - keycloak-oauth-secret.yaml
   - generated-client-secret.yaml
+  - generated-ca-secret.yaml
