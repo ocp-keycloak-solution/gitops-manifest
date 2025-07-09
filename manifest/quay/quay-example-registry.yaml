@@ -16,7 +16,10 @@ spec:
             memory: 4Gi
           requests:
             memory: 4Gi
-
+    - managed: true
+      kind: clair
+    - managed: true
+      kind: clairpostgres
     - managed: true
       kind: postgres
     - managed: true
