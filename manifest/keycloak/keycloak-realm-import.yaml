@@ -60,6 +60,8 @@ spec:
       - username: "group-sync-svc"
         enabled: true
         email: "group-sync-svc@example.com"
+        firstName: "GroupSync"
+        lastName: "Operator"
         emailVerified: true
         clientRoles:
           openshift-client:
