@@ -135,7 +135,7 @@ spec:
           - "groups"
        
         consentRequired: false
-        publicClient: true
+        publicClient: false
         clientAuthentication: true
         directAccessGrantsEnabled: false
         serviceAccountsEnabled: false
