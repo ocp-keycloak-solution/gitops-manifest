@@ -167,6 +167,7 @@ spec:
           - "profile"
           - "email"
           - "groups"
+          - "offline_access"
        
         consentRequired: false
         directAccessGrantsEnabled: false
