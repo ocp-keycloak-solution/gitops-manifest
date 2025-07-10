@@ -21,7 +21,8 @@ spec:
             severity: warning
           annotations:
             summary: "High PostgreSQL connection usage on {{ $labels.instance }}"
-            description: "Connection usage is above 90% ({{ $value | humanizePercentage }})."
+            description: | 
+              Connection usage is above 90% ({{ $value | humanizePercentage }}).
         - alert: PostgresSlowQueries
           expr: rate(pg_stat_activity_max_tx_duration{state="active"}[5m]) > 30
           for: 5m
