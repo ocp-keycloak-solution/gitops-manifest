@@ -78,18 +78,22 @@ spec:
     groups:
       - name: cluster-admins
         path: /cluster-admins
+        realmRoles: ["offline_access"] 
         attributes:
           openshift-role: ["cluster-admin"]
       - name: developers
         path: /developers
+        realmRoles: ["offline_access"]
         attributes:
           openshift-role: ["basic-user"]
       - name: ssoadmin
         path: /ssoadmin
+        realmRoles: ["offline_access"]
         attributes: 
           openshift-role: ["ssoadmin"]
       - name: admin
         path: /admin
+        realmRoles: ["offline_access"]
         attributes: 
           openshift-role: ["admin"]
     
