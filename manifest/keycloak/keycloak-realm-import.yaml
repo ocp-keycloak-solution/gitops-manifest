@@ -135,7 +135,6 @@ spec:
           - "groups"
        
         consentRequired: false
-        publicClient: false
         clientAuthentication: true
         directAccessGrantsEnabled: false
         serviceAccountsEnabled: false
@@ -172,7 +171,6 @@ spec:
        
         consentRequired: false
         clientAuthentication: true
-        publicClient: true
         directAccessGrantsEnabled: false
         serviceAccountsEnabled: false
         implicitFlowEnabled: false
