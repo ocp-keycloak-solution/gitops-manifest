@@ -5,7 +5,7 @@ metadata:
 spec:
   identityProviders:
   - name: keycloak
-    mappingMethod: claim
+    mappingMethod: add
     type: OpenID
     openID:
       clientID: openshift-client
