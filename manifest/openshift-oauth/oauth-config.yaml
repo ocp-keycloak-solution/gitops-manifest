@@ -30,14 +30,4 @@ spec:
         - groups
       issuer: https://keycloak.apps.cluster.example.io/realms/openshift
 
-  - name: htpasswd
-    mappingMethod: add
-    type: HTPasswd
-    htpasswd:
-      fileData:
-        name: htpasswd
-      
-
-
-
 
