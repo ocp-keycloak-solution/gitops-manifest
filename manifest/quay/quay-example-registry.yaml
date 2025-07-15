@@ -8,9 +8,7 @@ spec:
     - managed: true
       kind: quay
       overrides:
-        env:
-          - name: DEBUGLOG
-            value: 'true'
+        
         resources:
           limits:
             memory: 4Gi

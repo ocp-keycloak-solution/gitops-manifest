@@ -2,6 +2,7 @@ apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
 metadata:
   name: openshift-realm-import
+  namespace: keycloak
 spec:
   keycloakCRName: keycloak-platform-instance
   realm:
@@ -27,16 +28,11 @@ spec:
         emailVerified: true
         credentials:
           - type: "password"
-            value: "changeme"  # Change this to a secure password
+            value: "changeme"  
             temporary: false
-        realmRoles:
-          - "admin"
-          - "cluster-admin"
         groups:
           - "cluster-admins"
           - "developers"
-          - "ssoadmin"
-          - "admin"
       
       - username: "openshift-admin"
         enabled: true
@@ -46,16 +42,12 @@ spec:
         emailVerified: true
         credentials:
           - type: "password"
-            value: "changeme"  # Change this to a secure password
+            value: "changeme"  
             temporary: false
-        realmRoles:
-          - "admin"
-          - "cluster-admin"
         groups:
           - "cluster-admins"
           - "developers"
-          - "ssoadmin"
-          - "admin"
+
       # Group Sync Service Account
       - username: "group-sync-svc"
         enabled: true
@@ -70,8 +62,34 @@ spec:
             - "view-users"
         credentials:
           - type: "password"
-            value: "changeme"  # Change this to a secure password
+            value: "changeme"  
             temporary: false
+      
+      - username: "user1"
+        enabled: true
+        email: "user1@example.com"
+        firstName: "User"
+        lastName: "One"
+        emailVerified: true
+        credentials:
+          - type: "password"
+            value: "changeme"  
+            temporary: false
+        groups:
+          - "team-one"
+         
+      - username: "user2"
+        enabled: true
+        email: "user2@example.com"
+        firstName: "User"
+        lastName: "Two"
+        emailVerified: true
+        credentials:
+          - type: "password"
+            value: "changeme"  
+            temporary: false
+        groups:
+          - "team-one"
     
     
     # Groups
@@ -79,31 +97,25 @@ spec:
       - name: cluster-admins
         path: /cluster-admins
         realmRoles: ["offline_access"] 
-        attributes:
-          openshift-role: ["cluster-admin"]
+       
       - name: developers
         path: /developers
-        realmRoles: ["offline_access"]
-        attributes:
-          openshift-role: ["basic-user"]
-      - name: ssoadmin
-        path: /ssoadmin
-        realmRoles: ["offline_access"]
-        attributes: 
-          openshift-role: ["ssoadmin"]
-      - name: admin
-        path: /admin
-        realmRoles: ["offline_access"]
-        attributes: 
-          openshift-role: ["admin"]
+        realmRoles: ["offline_access", "quay-team-sync"]
+      
+      - name: team-one
+        path: /team-one
+        realmRoles: ["offline_access", "quay-team-sync"]
+      - name: team-two
+        path: /team-two
+        realmRoles: ["offline_access", "quay-team-sync"]
+
     
     # Roles
     roles:
       realm:
-        - name: openshift-admin
-          description: "OpenShift Cluster Administrator"
-        - name: openshift-developer
-          description: "OpenShift Developer"
+        - name: quay-team-sync
+          description: "Quay Team Sync Role"
+      
 
     clientScopes:
       - name: openid
@@ -143,12 +155,12 @@ spec:
         serviceAccountsEnabled: false
         implicitFlowEnabled: false
         standardFlowEnabled: true
-        secret: OGFtFrsPnmzCAtV8wCWxqUFisZ6P39gT
+        secret: OPENSHIFT_CLIENT_SECRET_PLACEHOLDER
         redirectUris:
-          - "https://oauth-openshift.apps.changeme/oauth2callback/keycloak"
+          - "https://oauth-openshift.apps.cluster-8pq26.dynamic.redhatworkshops.io/oauth2callback/keycloak"
         webOrigins:
-          - "https://console-openshift-console.apps.changeme"
-          - "https://oauth-openshift.apps.changeme"
+          - "https://console-openshift-console.apps.cluster-8pq26.dynamic.redhatworkshops.io"
+          - "https://oauth-openshift.apps.cluster-8pq26.dynamic.redhatworkshops.io"
         protocolMappers:
           - name: "preferred_username"
             protocol: "openid-connect"
@@ -178,11 +190,12 @@ spec:
         serviceAccountsEnabled: false
         implicitFlowEnabled: false
         standardFlowEnabled: true
-        secret: QUAY_CLIENT_SECRET_PLACEHOLDER  # Replace with actual secret
+        secret: QUAY_CLIENT_SECRET_PLACEHOLDER  
         redirectUris:
           - "https://example-quay-quay-registry.apps.cluster-8pq26.dynamic.redhatworkshops.io/oauth2/oidc/callback"
         webOrigins:
           - "https://example-quay-quay-registry.apps.cluster-8pq26.dynamic.redhatworkshops.io"
+        
         protocolMappers:
           - name: "preferred_username"
             protocol: "openid-connect"
@@ -193,6 +206,17 @@ spec:
               "id.token.claim": "true"
               "user.attribute": "username"
               "userinfo.token.claim": "true"
+          
+          - name: "groups"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-realm-role-mapper"
+            config:
+              "access.token.claim": "true"
+              "claim.name": "groupNames"
+              "id.token.claim": "true"
+              "userinfo.token.claim": "true"
+              "full.path": "false"
+              "multivalued": "true"
       
      
 
